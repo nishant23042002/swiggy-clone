@@ -1,17 +1,26 @@
 import { useState } from "react";
 import { MdStars } from "react-icons/md";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 function RestaurantCard({ restaurants }) {
     const [topRestaurant, setTopRestaurant] = useState(false);
     const [fastDelivery, setFastDelivery] = useState(false);
+    const [isVeg, setVeg] = useState(false);
+    const [offers, setOffers] = useState(false);
+
+
     function topRatedRestaurants() {
         let filtered = restaurants;
         if (topRestaurant) {
             filtered = filtered.filter(res => res.info.avgRating >= "4.5")
         }
-        if(fastDelivery){
-            filtered = filtered.filter(fast => fast.info.sla?.deliveryTime < "25")
+        if (fastDelivery) {
+            filtered = filtered.filter(fast => fast.info.sla?.deliveryTime < "30")
+        }
+        if(isVeg){
+            filtered = filtered.filter(veg => veg.info.veg)
+        }
+        if(offers){
+            filtered = filtered.filter(offers => offers.info.aggregatedDiscountInfoV3.subHeader < "AT ₹129")
         }
         return filtered;
     }
@@ -20,8 +29,16 @@ function RestaurantCard({ restaurants }) {
         setTopRestaurant(!topRestaurant)
     }
 
-    function toggleFastDelivery(){
+    function toggleFastDelivery() {
         setFastDelivery(!fastDelivery)
+    }
+
+    function toggleVegRestaurants(){
+        setVeg(!isVeg)
+    }
+
+    function toggleOfferRestaurants(){
+        setOffers(!offers)
     }
     return (
         <>
@@ -34,19 +51,19 @@ function RestaurantCard({ restaurants }) {
                         <button className="flex items-center gap-2 p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer">Filter <span><img width="12" height="14" src="https://img.icons8.com/small/16/sorting-options.png" alt="sorting-options" /></span></button>
                     </div>
                     <div>
-                        <button className="flex px-3 items-center p-1.5 border-1 rounded-3xl border-gray-300 gap-2 font-semibold text-sm text-gray-600 cursor-pointer">Sort By <span><MdOutlineKeyboardArrowDown /></span></button>
-                    </div>
-                    <div>
                         <button className={fastDelivery ? "p-1.5 px-3 border-1 rounded-3xl font-semibold text-sm text-gray-600 cursor-pointer bg-gray-200" : "p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer"} onClick={toggleFastDelivery}>Fast Delivery</button>
                     </div>
                     <div>
-                        <button className={topRestaurant ? "p-1.5 px-3 border-1 rounded-3xl font-semibold text-sm text-gray-600 cursor-pointer bg-gray-200" : "p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer"} onClick={toggleTopRestaurants}>Rating 4.0+</button>
+                        <button className={topRestaurant ? "p-1.5 px-3 border-1 rounded-3xl font-semibold text-sm text-gray-600 cursor-pointer bg-gray-200" : "p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer"} onClick={toggleTopRestaurants}>Rating 4.5+</button>
                     </div>
                     <div>
-                        <button className="p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer">Pure Veg</button>
+                        <button className={isVeg ? "p-1.5 px-3 border-1 rounded-3xl font-semibold text-sm text-gray-600 cursor-pointer bg-gray-200" : "p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer"} onClick={toggleVegRestaurants}>Pure Veg</button>
                     </div>
                     <div>
-                        <button className="p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer">Offers</button>
+                        <button className={offers ? "p-1.5 px-3 border-1 rounded-3xl font-semibold text-sm text-gray-600 cursor-pointer bg-gray-200" : "p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer"} onClick={toggleOfferRestaurants}>Offers</button>
+                    </div>
+                    <div>
+                        <button className="p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer">Rs. 300-Rs. 600</button>
                     </div>
                     <div>
                         <button className="p-1.5 px-3 border-1 rounded-3xl border-gray-300 font-semibold text-sm text-gray-600 cursor-pointer">Less than Rs. 300</button>
@@ -59,16 +76,11 @@ function RestaurantCard({ restaurants }) {
                             if (!info) return null;
                             return (
                                 <div key={index} className="w-[350px] rounded-2xl overflow-hidden cursor-pointer hover:scale-95 duration-300">
-                                    <img
-                                        src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/${info.cloudinaryImageId}`}
-                                        alt={info.name}
-                                        className="w-full h-57 object-cover rounded-2xl"
-                                    />
+                                    <img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/${info.cloudinaryImageId}`} alt={info.name} className="w-full h-57 object-cover rounded-2xl"/>
                                     <div className="p-3">
                                         <h2 className="font-bold text-lg">{info.name}</h2>
                                         <div className="text-sm font-medium text-gray-700">
                                             <span className="font-semibold flex items-center gap-0.5"><MdStars color="green" size="20px" />{info.avgRating}   •   {info.sla?.deliveryTime} mins</span>
-                                            {/* {info.avgRating} ⭐ | {info.sla?.deliveryTime} mins */}
                                         </div>
                                         <p className="text-sm text-gray-500">{info.cuisines?.join(', ')}</p>
                                         <p className="text-sm text-gray-400">{info.areaName}</p>
