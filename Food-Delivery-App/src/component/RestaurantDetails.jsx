@@ -4,6 +4,9 @@ import { useLocation, useParams } from "react-router-dom";
 import { MdStars } from "react-icons/md";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { LuSearch } from "react-icons/lu";
+import {useDispatch} from 'react-redux'
+import { addItem } from "../utils/cartSlice";
+
 
 function RestaurantDetails() {
     const params = useParams();
@@ -13,6 +16,7 @@ function RestaurantDetails() {
     const restaurantInfo = location.state?.info;
     const [search, setSearch] = useState("");
     const [filterRes, setFilterRes] = useState([]);
+    const dispatch = useDispatch()
 
 
     useEffect(() => {
@@ -40,6 +44,11 @@ function RestaurantDetails() {
         const filtered = menuItems.filter(item => item.card.info.name.toLowerCase().includes(search))
         setFilterRes(filtered);
     }
+
+    function handleaddItem(item){
+        dispatch(addItem(item));
+    }
+
 
     if (loading) {
         return (
@@ -124,7 +133,7 @@ function RestaurantDetails() {
                                         <div className="w-30 h-auto mb-2">
                                             <img className="rounded-md text-center font-bold" src={`https://media-assets.swiggy.com/swiggy/image/upload/q_auto,w_508,h_500,c_fill/${resDetails.card.info.imageId}`} alt={resDetails.card.info.name} />
                                         </div>
-                                        <button className="p-2 w-full rounded-md border-1 border-gray-300 bg-white  text-green-700 font-extrabold cursor-pointer">ADD</button>
+                                        <button onClick={() => handleaddItem(resDetails)} className="p-2 w-full rounded-md border-1 border-gray-300 bg-white  text-green-700 font-extrabold cursor-pointer">ADD</button>
                                     </div>
                                 </div>
                             </div>

@@ -3,15 +3,20 @@ import Header from './component/Header'
 import Footer from './component/Footer'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
+import {Provider} from 'react-redux'
+import appStore from './utils/appStore'
+
 
 function App() {
 
   return (
-    <React.Fragment>
+    <>
+    <Provider store={appStore}>
       <Header />
       <Outlet />
       <Footer />
-    </React.Fragment>
+    </Provider>
+    </>
   )
 }
 
