@@ -11,7 +11,7 @@ function Header() {
     return (
         <>
             <header className="sticky top-0 shadow-xl/8 z-50 bg-white">
-                <div className="flex items-center p-4 justify-evenly">
+                <nav className="flex items-center p-4 justify-evenly">
                     <div className="flex items-center gap-12">
                         <img className="cursor-pointer hover:scale-125 duration-500" src="https://cdn-1.webcatalog.io/catalog/swiggy-dineout/swiggy-dineout-icon-unplated.png?v=1744088959607" height="47" width="47" alt="swiggy" />
                         <span className="cursor-pointer font-bold text-sm underline underline-offset-8 decoration-2 tracking-tighter hover:text-orange-600 duration-75">Other</span>
@@ -25,7 +25,7 @@ function Header() {
                         <Link className="font-semibold text-md flex items-center gap-3 hover:text-orange-600 duration-75" to='/cart'><span><IoCartOutline size={20}/></span> Cart</Link>
                     </ul>
                     
-                </div>
+                </nav>
             </header>
         </>
     )

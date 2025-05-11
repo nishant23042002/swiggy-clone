@@ -1,0 +1,2 @@
+// ITEMS to be filtered on the basis of veg and non-veg
+allItems[1].card.info.itemAttribute.vegClassifier   //"NONVEG" or "VEG"

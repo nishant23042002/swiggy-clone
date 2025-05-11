@@ -8,12 +8,15 @@ import SignIn from './component/SignIn.jsx';
 import Help from './component/Help.jsx';
 import Cart from './component/Cart.jsx';
 import Body from './component/Body.jsx';
+import Error from './component/Error.jsx';
+import RestaurantDetails from './component/RestaurantDetails.jsx';
 
-// Define your routes
+
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    errorElement: <Error />,
     children: [
       { path: '/', element: <Body /> },
       { path: 'offers', element: <Offers /> },
@@ -21,10 +24,11 @@ const router = createBrowserRouter([
       { path: 'signin', element: <SignIn /> },
       { path: 'help', element: <Help /> },
       { path: 'cart', element: <Cart /> },
+      { path: 'restaurant/:id', element: <RestaurantDetails /> },
     ],
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
-    <RouterProvider router={router} />
+    <RouterProvider router={router}></RouterProvider>
 );

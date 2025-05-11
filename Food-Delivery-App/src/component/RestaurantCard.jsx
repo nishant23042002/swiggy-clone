@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MdStars } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 function RestaurantCard({ restaurants }) {
     const [topRestaurant, setTopRestaurant] = useState(false);
@@ -20,7 +21,7 @@ function RestaurantCard({ restaurants }) {
             filtered = filtered.filter(veg => veg.info.veg)
         }
         if(offers){
-            filtered = filtered.filter(offers => offers.info.aggregatedDiscountInfoV3.subHeader < "AT ₹129")
+            filtered = filtered.filter(offers => offers.info.aggregatedDiscountInfoV3.header === "50% OFF")
         }
         return filtered;
     }
@@ -70,22 +71,23 @@ function RestaurantCard({ restaurants }) {
                     </div>
                 </div>
                 <div className="flex gap-8 flex-wrap py-6">
+                
                     {
                         topRatedRestaurants().map((restaurant, index) => {
-                            const info = restaurant?.info;
-                            if (!info) return null;
                             return (
-                                <div key={index} className="w-[350px] rounded-2xl overflow-hidden cursor-pointer hover:scale-95 duration-300">
-                                    <img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/${info.cloudinaryImageId}`} alt={info.name} className="w-full h-57 object-cover rounded-2xl"/>
-                                    <div className="p-3">
-                                        <h2 className="font-bold text-lg">{info.name}</h2>
-                                        <div className="text-sm font-medium text-gray-700">
-                                            <span className="font-semibold flex items-center gap-0.5"><MdStars color="green" size="20px" />{info.avgRating}   •   {info.sla?.deliveryTime} mins</span>
+                                <Link key={index} to={`/restaurant/${restaurant.info.id}`} state={{ info: restaurant.info }}>
+                                    <div className="w-[350px] rounded-2xl overflow-hidden cursor-pointer hover:scale-95 duration-300">
+                                        <img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/${restaurant.info.cloudinaryImageId}`} alt={restaurant.info.name} className="w-full h-57 object-cover rounded-2xl"/>
+                                        <div className="p-3">
+                                            <h2 className="font-bold text-lg">{restaurant.info.name}</h2>
+                                            <div className="text-sm font-medium text-gray-700">
+                                                <span className="font-semibold flex items-center gap-0.5"><MdStars color="green" size="20px" />{restaurant.info.avgRating}   •   {restaurant.info.sla?.deliveryTime} mins</span>
+                                            </div>
+                                            <p className="text-sm text-gray-500">{restaurant.info.cuisines?.join(' | ')}</p>
+                                            <p className="text-sm text-gray-400">{restaurant.info.areaName}</p>
                                         </div>
-                                        <p className="text-sm text-gray-500">{info.cuisines?.join(', ')}</p>
-                                        <p className="text-sm text-gray-400">{info.areaName}</p>
-                                    </div>
-                                </div>
+                                    </div>                               
+                                </Link>
                             )
                         })
                     }
