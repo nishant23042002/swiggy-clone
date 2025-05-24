@@ -6,10 +6,13 @@ import { IoCartOutline } from "react-icons/io5";
 import { IoMdHome } from "react-icons/io";
 import {Link} from 'react-router-dom'
 import { useSelector } from "react-redux";
+import { MdOutlineRemoveShoppingCart } from "react-icons/md";
+
 
 
 function Header() {
-    const cartItems = useSelector(store => store.cart.items)
+    const cartItems = useSelector((store) => store.cart.items)
+    const totalItem = cartItems.reduce((acc, curr) => acc + curr.quantity, 0)
     return (
         <>
             <header className="sticky top-0 shadow-xl/8 z-50 bg-white">
@@ -24,7 +27,7 @@ function Header() {
                         <Link className="font-semibold text-md flex items-center gap-3 hover:text-orange-600 duration-75" to="/offers"><span><BiSolidOffer size={20}/></span> Offers</Link>
                         <Link className="font-semibold text-md flex items-center gap-3 hover:text-orange-600 duration-75" to='/help'> <span><FiHelpCircle size={20}/></span>Help</Link>
                         <Link className="font-semibold text-md flex items-center gap-3 hover:text-orange-600 duration-75" to='/signin'><span><IoPersonOutline size={20}/></span> SignIn</Link>
-                        <Link className="font-semibold text-md flex items-center gap-3 hover:text-orange-600 duration-75" to='/cart'><span><IoCartOutline size={20}/></span> Cart {cartItems.length}</Link>
+                        <Link className="font-semibold text-md flex items-center gap-3 hover:text-orange-600 duration-75" to='/cart'><span><IoCartOutline size={20}/></span> Cart {totalItem}</Link>
                     </ul>
                     
                 </nav>

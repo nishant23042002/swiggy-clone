@@ -4,8 +4,10 @@ import { useLocation, useParams } from "react-router-dom";
 import { MdStars } from "react-icons/md";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { LuSearch } from "react-icons/lu";
-import {useDispatch} from 'react-redux'
-import { addItem } from "../utils/cartSlice";
+import { TiPlus } from "react-icons/ti";
+import { FaMinus } from "react-icons/fa6";
+import { useDispatch, useSelector } from 'react-redux'
+import { addItem, removeItem } from "../utils/cartSlice";
 
 
 function RestaurantDetails() {
@@ -17,6 +19,9 @@ function RestaurantDetails() {
     const [search, setSearch] = useState("");
     const [filterRes, setFilterRes] = useState([]);
     const dispatch = useDispatch()
+    const cartItems = useSelector((store) => store.cart.items);
+
+
 
 
     useEffect(() => {
@@ -39,16 +44,24 @@ function RestaurantDetails() {
             })
     }, [params.id])
 
-    function handleSearch(search){
+    function handleSearch(search) {
         setSearch(search);
         const filtered = menuItems.filter(item => item.card.info.name.toLowerCase().includes(search))
         setFilterRes(filtered);
     }
 
-    function handleaddItem(item){
+    function handleaddItem(item) {
         dispatch(addItem(item));
     }
 
+    function handleRemoveItem(item) {
+        dispatch(removeItem(item))
+    }
+
+    const getItemQuantity = (itemId) => {
+        const found = cartItems.find(item => item.card.info.id === itemId);
+        return found ? found.quantity : 0;
+    };
 
     if (loading) {
         return (
@@ -62,7 +75,7 @@ function RestaurantDetails() {
             <div>
                 <div>
                     <div className="flex items-center justify-center my-4">
-                        <div className="py-5 w-[40%] border-2">
+                        <div className="py-5 w-[40%] bg-gray-100 rounded-2xl px-2">
                             <h1 className="text-2xl font-bold">{restaurantInfo?.name}</h1>
                         </div>
 
@@ -133,7 +146,20 @@ function RestaurantDetails() {
                                         <div className="w-30 h-auto mb-2">
                                             <img className="rounded-md text-center font-bold" src={`https://media-assets.swiggy.com/swiggy/image/upload/q_auto,w_508,h_500,c_fill/${resDetails.card.info.imageId}`} alt={resDetails.card.info.name} />
                                         </div>
-                                        <button onClick={() => handleaddItem(resDetails)} className="p-2 w-full rounded-md border-1 border-gray-300 bg-white  text-green-700 font-extrabold cursor-pointer">ADD</button>
+                                        <div className="relative">
+                                            {
+                                                getItemQuantity(resDetails.card.info.id) === 0 ? (
+                                                    <button onClick={() => handleaddItem(resDetails)} className="p-2 w-full rounded-md border border-gray-300 bg-white text-green-700 font-extrabold cursor-pointer">ADD</button>
+                                                ) : (
+                                                    <div className="flex items-center justify-between w-full border border-gray-300 rounded-full overflow-hidden py-[6px]">
+                                                        <button onClick={() => handleRemoveItem(resDetails)} className="bg-white text-green-700 px-3 py-1 text-lg font-bold cursor-pointer"><FaMinus /></button>
+                                                        <span className="px-3 py-1 text-sm font-bold text-green-700">{getItemQuantity(resDetails.card.info.id)}</span>
+                                                        <button onClick={() => handleaddItem(resDetails)} className="bg-white text-green-700 px-3 py-1 text-lg font-bold cursor-pointer"><TiPlus /></button>
+                                                    </div>
+                                                )
+                                            }
+                                        </div>
+                                        <span>{resDetails.quantity}</span>
                                     </div>
                                 </div>
                             </div>
